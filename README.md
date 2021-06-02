@@ -1,4 +1,4 @@
-# vueos
+# Vue OS
 
 ## Project setup
 ```
