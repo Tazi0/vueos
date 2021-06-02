@@ -19,12 +19,37 @@
     "system": {
         "name": "System Preferences",
         "icon": "apps/System Preferences.png",
-        "favorite": true
-    },
-
-    "work": {
-        "name": "Work",
-        "html": "<>",
-        "image": "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a"
+        "favorite": true,
+        "options": {
+            "backdrop": "sides",
+            "size": "medium"
+        },
+        "menu": [
+            {
+                "title": "Display",
+                "command": "display",
+                "icon": "settings/Displays.png"
+            },
+            {
+                "title": "Network",
+                "command": "network",
+                "icon": "settings/Network.png"
+            },
+            {
+                "title": "General",
+                "command": "general",
+                "icon": "settings/General.png"
+            },
+            {
+                "title": "Screen Time",
+                "command": "screen",
+                "icon": "settings/Screen Time.png"
+            },
+            {
+                "title": "Software Updates",
+                "command": "updates",
+                "icon": "settings/Software Update.png"
+            }
+        ]
     }
 }

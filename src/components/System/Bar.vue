@@ -14,15 +14,12 @@ export default {
     name: "Bottom",
     props: {
         ActiveApps: Array,
-        favorites: Array
+        favorites: Object
     },
     methods: {
         open(...obj) {
             this.$emit('open', ...obj)
         }
-    },
-    mounted() {
-        console.log(this.favorites);
     }
 }
 </script>
@@ -41,6 +38,8 @@ export default {
 
     border: 1px solid #707070;
     border-radius: 17px;
+
+    user-select: none;
 }
 
 .favorites .app,

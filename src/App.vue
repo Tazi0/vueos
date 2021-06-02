@@ -1,10 +1,19 @@
 <template>
     <img id="backgroundIMG" src="http://s1.picswalls.com/wallpapers/2017/12/10/4k-screensaver_110629116_312.jpg" alt="BACKGROUND">
     <Bar :favorites="favorites" @open="openApp" />
+    <div class="windows">
+        <Window v-for="(v, i) in ActiveApps" :key="i" 
+            :object="v"
+            :options="v.options"
+            :menu="v.menu"
+            @close="closeApp(i)"
+        />
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Bar from "./components/System/Bar.vue"
+import Window from "./components/System/Window.vue"
 
 import Apps from "./assets/Apps.json"
 
@@ -12,6 +21,7 @@ export default {
     name: 'App',
     components: {
         Bar,
+        Window,
     },
     methods: {
         openApp(obj) {
@@ -42,6 +52,16 @@ export default {
             if(obj.icon) { // Icon grabber
                 obj.icon = require(`./assets/images/${obj.icon}`)
             }
+            if (obj.menu) {
+                var activeMenu = false
+                for (let i = 0; i < obj.menu.length; i++) {
+                    const e = obj.menu[i];
+                    obj.menu[i].icon = require(`./assets/images/${e.icon}`)
+                    if(e.active) activeMenu = true
+                }
+                if(!activeMenu) obj.menu[0].active = true
+            }
+
             if(obj.favorite) { // Always do this last
                 favorites[key] = obj
             }
