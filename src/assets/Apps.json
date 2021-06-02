@@ -1,0 +1,30 @@
+{
+    "projects": {
+        "name": "Projects",
+        "folder": true,
+        "children": [
+            {
+                "name": "Lyfe",
+                "url": "https://tazio.nl",
+                "image": "logo/lyfe.png"
+            },
+            {
+                "name": "Boho Studio",
+                "url": "https://tazio.nl",
+                "image": "logo/boho.png"
+            }
+        ]
+    },
+
+    "system": {
+        "name": "System Preferences",
+        "icon": "apps/System Preferences.png",
+        "favorite": true
+    },
+
+    "work": {
+        "name": "Work",
+        "html": "<>",
+        "image": "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a"
+    }
+}
