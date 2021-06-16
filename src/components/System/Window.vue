@@ -1,5 +1,5 @@
 <template>
-    <div class="window" :class="((active) ? 'active ' : '') + classes.window.join(' ')" v-on:mousemove="move">
+    <div class="window" :class="((active) ? 'active ' : '') + (options.size) + classes.window.join(' ')" v-on:mousemove="move">
         <div class="header" v-on:mousedown="down" v-on:mouseup="up" v-on:mouseleave="up">
             <h3 class="title" v-if="!object.noTitle && object.name">{{object.name}}</h3>
             <div class="buttons">
@@ -17,8 +17,8 @@
                 </div>
             </div>
 
-            <div class="child"></div>
             <!-- A child class will be run here -->
+            <Child class="child" :class={transparent} />
         </div>
         <!-- <span class="resize" v-on:mousedown="resize" v-on:mousemove="resize"></span> -->
     </div>
@@ -33,11 +33,13 @@ export default {
             type: Object,
             default: () => {return {
                 backdrop: 'solid' || 'sides'  || 'big',
-                size: 'small' || 'medium' || 'big'
+                size: 'small' || 'medium' || 'big',
+                transparent: false
             }}
         },
         menu: Array
     },
+    components: {},
     methods: {
         // * Button events * //
         close() {
@@ -138,6 +140,8 @@ export default {
         // * ----------- * //
     },
     data() {
+        var child = this.object.child?.default
+        if(child) this.$options.components.Child = child
         return {
             dragging: {
                 active: false,
@@ -159,7 +163,8 @@ export default {
                 window: []
             },
             active: true,
-            cursor: "grab"
+            cursor: "grab",
+            transparent: this.object.options.transparent
         }
     },
     mounted() {
@@ -195,8 +200,19 @@ export default {
     border-radius: 13px;
 }
 
+.header {
+    background-color: rgba(71, 71, 71, 0.34);
+    backdrop-filter: blur(16px) brightness(115%);
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+}
+
 .window.blurSolid {
     background-color: #F3ECEF;
+}
+
+.window.big {
+    width: 1000px;
 }
 
 .window.blurBig,
@@ -207,8 +223,6 @@ export default {
 
 .window.blurSides .header {
     background-color: #F3ECEF;
-    border-top-left-radius: 13px;
-    border-top-right-radius: 13px;
 }
 .window.blurSides .child {
     position: relative;
@@ -296,6 +310,10 @@ span.resize {
     border-bottom-left-radius: 13px;
 }
 
+.child.transparent {
+    background-color: transparent;
+}
+
 .container {
     flex-grow: 1;
     display: flex;
@@ -313,7 +331,7 @@ span.resize {
 }
 
 .header .title {
-    mix-blend-mode: difference;
+    color: white;
 
     position: absolute;
     left: 50%;
