@@ -77,6 +77,43 @@ export default {
 </script>
 
 <style>
+@font-face {
+    font-family: 'Kobe';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../public/Kobe Regular.woff');
+}
+@font-face {
+    font-family: 'Kobe';
+    font-weight: normal;
+    font-style: normal;
+    font-style: italic;
+    src: url('../public/Kobe Oblique.woff');
+}
+@font-face {
+    font-family: 'Kobe';
+    font-weight: 500;
+    src: url('../public/Kobe Bold.woff');
+}
+@font-face {
+    font-family: 'Kobe';
+    font-weight: 500;
+    font-style: italic;
+    src: url('../public/Kobe Bold Oblique.woff');
+}
+@font-face {
+    font-family: 'Kobe';
+    font-weight: 800;
+    src: url('../public/Kobe Black.woff');
+}
+@font-face {
+    font-family: 'Kobe';
+    font-weight: 800;
+    font-style: italic;
+    src: url('../public/Kobe Black Oblique.woff');
+}
+
+
 html, body {
     margin: 0;
     padding: 0;
