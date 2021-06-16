@@ -62,6 +62,11 @@ export default {
                 if(!activeMenu) obj.menu[0].active = true
             }
 
+            
+            if(obj.child) {
+                obj.child = require(`./components/Apps/${obj.child}.vue`)
+            }
+
             if(obj.favorite) { // Always do this last
                 favorites[key] = obj
             }
@@ -121,7 +126,7 @@ html, body {
 }
 
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'Kobe';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;

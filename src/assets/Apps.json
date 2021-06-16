@@ -20,6 +20,7 @@
         "name": "System Preferences",
         "icon": "apps/System Preferences.png",
         "favorite": true,
+        "child": "System",
         "options": {
             "backdrop": "sides",
             "size": "medium"
@@ -51,5 +52,16 @@
                 "icon": "settings/Software Update.png"
             }
         ]
+    },
+
+    "notes": {
+        "name": "Notes",
+        "icon": "apps/Notes.png",
+        "favorite": true,
+        "options": {
+            "transparent": "true",
+            "size": "big"
+        },
+        "child": "Notes"
     }
 }
