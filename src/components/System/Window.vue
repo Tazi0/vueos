@@ -20,7 +20,7 @@
             <div class="child"></div>
             <!-- A child class will be run here -->
         </div>
-        <span class="resize" v-on:drag="resize"></span>
+        <!-- <span class="resize" v-on:mousedown="resize" v-on:mousemove="resize"></span> -->
     </div>
 </template>
 
@@ -46,7 +46,40 @@ export default {
 
         // * Resize event * //
         resize(event) {
-            console.log(event);
+            var type = event.type
+            var r = this.resizing
+            var el = r.el || event.path[1]
+
+            if(r.active && type == "mousemove") {
+                var x = r.mousePos.x - event.clientX,
+                    y = r.mousePos.y - event.clientY,
+                    box = el.getBoundingClientRect(),
+                    OGwidth = box.left,
+                    OGheight = box.top
+                
+                r.mousePos.x = event.clientX + 5;
+                r.mousePos.y = event.clientY + 5;
+
+                console.log((OGwidth + x), (OGheight + y));
+
+                console.log(el.style.width, el.style.height);
+
+                el.style.width = (OGwidth + x)
+                el.style.height = (OGheight + y)
+            } else if(!r.active && type == "mousedown") {
+                event.preventDefault()
+                console.log("start resize");
+
+                r.mousePos.x = event.clientX
+                r.mousePos.y = event.clientY
+                
+                r.active = true
+                r.el = el
+            } else if(r.active && type == "mouseup") {
+                console.log("stop resize");
+                r.active = false
+                r.el = null
+            }
         },
 
         // * Drag events * //
@@ -107,6 +140,14 @@ export default {
     data() {
         return {
             dragging: {
+                active: false,
+                el: null,
+                mousePos: {
+                    x: 0,
+                    y: 0
+                }
+            },
+            resizing: {
                 active: false,
                 el: null,
                 mousePos: {
@@ -188,6 +229,16 @@ export default {
     transform: rotate(90deg) translate(-50%, 75%); /* rotation and positioning */
 }
 
+span.resize {
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    width: 25px;
+    height: 25px;
+    background-color: blueviolet;
+
+    cursor: nw-resize;
+}
 .buttons {
     position: absolute;
     top: 50%;
