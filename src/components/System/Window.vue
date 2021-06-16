@@ -1,5 +1,5 @@
 <template>
-    <div class="window" :class="((active) ? 'active ' : '') + (options.size) + classes.window.join(' ')" v-on:mousemove="move">
+    <div class="window" :class="((active) ? 'active ' : '') + ((options.transparent) ? 'trans ' : '') + (options.size) + classes.window.join(' ')" v-on:mousemove="move">
         <div class="header" v-on:mousedown="down" v-on:mouseup="up" v-on:mouseleave="up">
             <h3 class="title" v-if="!object.noTitle && object.name">{{object.name}}</h3>
             <div class="buttons">
@@ -198,6 +198,20 @@ export default {
     height: 500px;
 
     border-radius: 13px;
+}
+
+.window.trans .header {
+    position: absolute;
+    width: 100%;
+
+    z-index: 100;
+
+    backdrop-filter: none;
+    background-color: transparent;
+}
+
+.window.trans .header h3 {
+    display: none;
 }
 
 .header {

@@ -125,6 +125,10 @@ html, body {
     overflow: hidden;
 }
 
+* {
+    user-select: none;
+}
+
 #app {
     font-family: 'Kobe';
     -webkit-font-smoothing: antialiased;
@@ -136,11 +140,13 @@ html, body {
 
     padding: 0;
     margin: 0;
+
+    position: relative;
 }
 
 #backgroundIMG {
     display:block;
-    width:100%; height:100%;
+    width: 100%; height: 100%;
     object-fit: cover;
 }
 
