@@ -19,10 +19,23 @@
 </template>
 
 <script>
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
+import tippy from 'tippy.js'
+import { Editor, EditorContent, VueRenderer } from '@tiptap/vue-3'
 
+import StarterKit from '@tiptap/starter-kit'
+import Document from '@tiptap/extension-document'
 import Placeholder from '@tiptap/extension-placeholder'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+
+import Typography from '@tiptap/extension-typography'
+
+import Mention from '@tiptap/extension-mention'
+import MentionList from '../util/MentionList'
+
+const ParagraphDocument = Document.extend({
+  content: 'paragraph',
+})
 
 export default {
     name: "Notes",
@@ -39,6 +52,7 @@ export default {
 
             this.cookie[this.active].content = data
             this.$cookie.setCookie('notes', JSON.stringify(this.cookie))
+            console.log(JSON.stringify(data));
         },
         updateTitle() {
             var editor = this.title
@@ -75,7 +89,7 @@ export default {
                 },
                 {
                     'title': "Wat kan je gebruiken?",
-                    'content': [{"type":"paragraph","content":[{"type":"text","text":"Bij deze notities kan je meerdere styles gebruiken, zoals:"}]},{"type":"paragraph","content":[{"type":"text","marks":[{"type":"bold"}],"text":"Bold"},{"type":"text","text":" - Control/Cmd B of ** en __  aan beide kanten van waar je wilt"},{"type":"hardBreak"},{"type":"text","marks":[{"type":"code"}],"text":"Code"},{"type":"text","text":" - Control/Cmd E of `"},{"type":"hardBreak"},{"type":"text","marks":[{"type":"italic"}],"text":"Italic"},{"type":"text","text":" - Control/Cmd I of * en _"},{"type":"hardBreak"},{"type":"text","text":"Strike - Control/Cmd Shift X of ~~"}]}]
+                    'content': [{"type":"paragraph","content":[{"type":"text","text":"Bij deze notities kan je meerdere styles gebruiken, zoals:"}]},{"type":"paragraph","content":[{"type":"text","marks":[{"type":"bold"}],"text":"Bold"},{"type":"text","text":" - Control/Cmd B of ** en __  aan beide kanten van waar je wilt"},{"type":"hardBreak"},{"type":"text","marks":[{"type":"code"}],"text":"Code"},{"type":"text","text":" - Control/Cmd E of `"},{"type":"hardBreak"},{"type":"text","marks":[{"type":"italic"}],"text":"Italic"},{"type":"text","text":" - Control/Cmd I of * en _"},{"type":"hardBreak"},{"type":"text","text":"Strike - Control/Cmd Shift X of ~~"}]},{"type":"paragraph","content":[{"type":"text","text":"Ook kan je gebruik maken van de volgende symbolen"}]},{"type":"paragraph","content":[{"type":"text","text":"© - Copyright: "},{"type":"text","marks":[{"type":"code"}],"text":"(c)"},{"type":"hardBreak"},{"type":"text","text":"→ - Pijl: "},{"type":"text","marks":[{"type":"code"}],"text":"->"},{"type":"hardBreak"},{"type":"text","text":"» - Dubbele pijl: "},{"type":"text","marks":[{"type":"code"}],"text":">>"},{"type":"hardBreak"},{"type":"text","text":"½ - Gedeelte: "},{"type":"text","marks":[{"type":"code"}],"text":"1/2"},{"type":"hardBreak"},{"type":"text","text":"≠ - Logica: "},{"type":"text","marks":[{"type":"code"}],"text":"!="},{"type":"hardBreak"},{"type":"text","text":"— - Streep: "},{"type":"text","marks":[{"type":"code"}],"text":"--"}]}]
                 },
             ]))
             notes = cookie.getCookie('notes')
@@ -100,6 +114,7 @@ export default {
 
         return {
             editor: null,
+            title: null,
             cookie: notes,
             active: 0
         }
@@ -111,13 +126,65 @@ export default {
             extensions: [
                 StarterKit,
                 Placeholder,
+                Typography,
+                Mention.configure({
+                HTMLAttributes: {
+                    class: 'mention',
+                },
+                suggestion: {
+                    items: query => {
+                    return [
+                        'Tazio de Bruin'
+                    ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+                    },
+                    render: () => {
+                    let component
+                    let popup
+
+                    return {
+                        onStart: props => {
+                            component = new VueRenderer(MentionList, {
+                                parent: this,
+                                propsData: props,
+                            })
+
+                            popup = tippy('body', {
+                                getReferenceClientRect: props.clientRect,
+                                appendTo: () => document.body,
+                                content: component.element,
+                                showOnCreate: true,
+                                interactive: true,
+                                trigger: 'manual',
+                                placement: 'bottom-start',
+                            })
+                        },
+                        onUpdate(props) {
+                            component.updateProps(props)
+
+                            popup[0].setProps({
+                                getReferenceClientRect: props.clientRect,
+                            })
+                        },
+                        onKeyDown(props) {
+                            return component.ref?.onKeyDown(props)
+                        },
+                        onExit() {
+                            popup[0].destroy()
+                            component.destroy()
+                        },
+                    }
+                    },
+                },
+                }),
             ],
             onUpdate: this.updateText.bind(this)
         })
 
         this.title = new Editor({
             extensions: [
-                StarterKit
+                ParagraphDocument,
+                Paragraph,
+                Text,
             ],
             onUpdate: this.updateTitle.bind(this)
         })
@@ -254,12 +321,23 @@ export default {
 .text ::v-deep(.ProseMirror) {
     min-height: 100px !important;
 }
-
-.ProseMirror p.is-editor-empty:first-child::before {
+::v-deep(.ProseMirror) code {
+    background-color: #787878;
+    color: white;
+    padding: 0 5px;
+    border-radius: 15px;
+}
+::v-deep(.ProseMirror) p.is-empty::before {
     content: attr(data-placeholder);
     float: left;
-    color: #ced4da;
+    color: #a7a7a7;
     pointer-events: none;
     height: 0;
+}
+.mention {
+  color: #A975FF;
+  background-color: rgba(#A975FF, 0.1);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.3rem;
 }
 </style>
