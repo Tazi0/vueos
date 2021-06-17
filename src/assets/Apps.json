@@ -63,5 +63,16 @@
             "size": "big"
         },
         "child": "Notes"
+    },
+
+    "sms": {
+        "name": "Messages",
+        "icon": "apps/Messages.png",
+        "favorite": true,
+        "options": {
+            "transparent": "true",
+            "size": "big"
+        },
+        "child": "SMS"
     }
 }
