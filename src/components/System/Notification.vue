@@ -1,6 +1,6 @@
 <template>
     <div id="notifications">
-        <div class="item blurred" v-for="(v, i) in not" :key="i" @click.stop="open(v.app)">
+        <div class="item blurred" v-for="(v, i) in not" :key="i" @click.stop="open(v.app, v.detail)">
             <img :src="getImg(v.app)" alt="image app">
             <div class="detail">
                 <h2>{{v.title}}</h2>
@@ -19,30 +19,30 @@ export default {
         notfi: {
             type: Array,
             default: () => {
-                return [
-                    {
-                        app: "notes",
-                        title: "Tazio",
-                        description: "Lets drink something, it's all on me"
-                    },
-                    {
-                        app: "notes",
-                        title: "Tazio",
-                        description: "Lets drink something"
-                    },
-                ]
+                return []
             }
         }
     },
     methods: {
-        open(app) {
-            this.$emit('open', app)
-            this.not = this.not.filter(function(v){ 
-                return v.app !== app;
-            });
+        open(app, detail) {
+            this.$emit('open', app, detail)
+            this.remove(app)
         },
         getImg(app) {
             return this.Apps[app].icon
+        },
+        remove(app, all = true) {
+            if(all) {
+                this.not = this.not.filter(function(v){ 
+                    return v.app !== app;
+                });
+            } else {
+                for (let i = 0; i < this.not.length; i++) {
+                    const e = this.not[i];
+                    if(e.app === app) this.not.splice(i, 1)
+                    break;
+                }
+            }
         }
     },
     data() {

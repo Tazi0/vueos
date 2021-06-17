@@ -18,7 +18,7 @@
             </div>
 
             <!-- A child class will be run here -->
-            <Child class="child" :class={transparent} />
+            <Child class="child" :class={transparent} :extra="JSON.stringify(extra?.[0])" />
         </div>
         <!-- <span class="resize" v-on:mousedown="resize" v-on:mousemove="resize"></span> -->
     </div>
@@ -37,7 +37,8 @@ export default {
                 transparent: false
             }}
         },
-        menu: Array
+        menu: Array,
+        extra: Object
     },
     components: {},
     methods: {

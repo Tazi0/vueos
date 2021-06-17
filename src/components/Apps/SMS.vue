@@ -28,6 +28,7 @@
 export default {
     name: "sms",
     props: {
+        extra: Proxy
     },
     components: {
     },
@@ -66,6 +67,7 @@ export default {
     data() {
         var cookie = this.$cookie
         var sms = cookie.getCookie('sms')
+        var active = 0
         if(sms == null) {
             cookie.setCookie('sms', JSON.stringify([
                 {
@@ -186,15 +188,33 @@ export default {
                             message: 'love'
                         }
                     ]
+                },
+                {
+                    user: 'Will Smith',
+                    content: [
+                        {
+                            incomming: true,
+                            message: "You are doing great stuff with designing, coding!"
+                        },
+                        {
+                            incomming: true,
+                            message: "Don't build a wall, place a brick as good as you can and soon you will have a wall"
+                        }
+                    ]
                 }
             ]))
             sms = cookie.getCookie('sms')
         }
         sms = JSON.parse(sms)
 
+        if(this.extra) {
+            var extra = JSON.parse(this.extra)
+            if(extra.id) active = extra.id
+        }
+
         return {
             cookie: sms,
-            active: 0
+            active
         }
     },
     mounted() {
@@ -332,6 +352,7 @@ export default {
     padding: 0;
     background-color: transparent;
     display: inline-block;
+    cursor: default;
 }
 
 .right .item p {

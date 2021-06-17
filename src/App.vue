@@ -1,12 +1,13 @@
 <template>
     <img id="backgroundIMG" src="http://s1.picswalls.com/wallpapers/2017/12/10/4k-screensaver_110629116_312.jpg" alt="BACKGROUND">
     <Bar :favorites="favorites" @open="openApp" />
-    <Notification :Apps="this.Apps" @open="openApp" />
+    <Notification :Apps="this.Apps" :notfi="this.notifications" @open="openApp" />
     <div class="windows">
         <Window v-for="(v, i) in ActiveApps" :key="i" 
             :object="v"
             :options="v.options"
             :menu="v.menu"
+            :extra="v.extra"
             @close="closeApp(i)"
         />
     </div>
@@ -27,7 +28,7 @@ export default {
         Notification,
     },
     methods: {
-        openApp(obj) {
+        openApp(obj, ...extra) {
             if(!obj) return false
             var name = obj.id || obj
 
@@ -35,7 +36,7 @@ export default {
 
             obj = Apps[name]
 
-            this.ActiveApps[name] = obj
+            this.ActiveApps[name] = {...obj, extra}
         },
         closeApp(obj) {
             if(!obj) return false
@@ -44,6 +45,14 @@ export default {
             if(!this.ActiveApps[name]) return false // Future notification
 
             delete this.ActiveApps[name]
+        },
+        newNotification(app, title, message, detail) {
+            this.notifications.push({
+                app,
+                title,
+                description: message,
+                detail
+            })
         }
     },
     data() {
@@ -78,8 +87,12 @@ export default {
         return {
             Apps,
             favorites,
+            notifications: [],
             ActiveApps: {}
         }
+    },
+    created() {
+        this.newNotification("sms", "Will Smith", "Don't build a wall, place a brick as good as you can and soon you will have a wall", {id: 3})
     }
 }
 </script>

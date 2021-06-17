@@ -40,6 +40,10 @@ const ParagraphDocument = Document.extend({
 export default {
     name: "Notes",
     props: {
+        extra: {
+            type: Object,
+            default: () => {return {}}
+        }
     },
     components: {
         EditorContent
@@ -81,6 +85,7 @@ export default {
     data() {
         var cookie = this.$cookie
         var notes = cookie.getCookie('notes')
+        var active = 0
         if(notes == null) {
             cookie.setCookie('notes', JSON.stringify([
                 {
@@ -112,11 +117,20 @@ export default {
             notes[i].description = desc
         }
 
+        if(this.extra || JSON.stringify(this.extra) !== "{}") {
+            if(typeof this.extra != "object") {
+                var extra = JSON.parse(this.extra)
+            } else {
+                extra = this.extra
+            }
+            if(extra.id) active = extra.id
+        }
+
         return {
             editor: null,
             title: null,
             cookie: notes,
-            active: 0
+            active
         }
     },
     mounted() {
