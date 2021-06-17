@@ -8,7 +8,10 @@
             :options="v.options"
             :menu="v.menu"
             :extra="v.extra"
+            v-bind:class="{active: i == this.highestApp}"
             @close="closeApp(i)"
+            @click.stop="activeApp(i)"
+            @activeApp="activeApp(i)"
         />
     </div>
 </template>
@@ -45,6 +48,10 @@ export default {
             if(!this.ActiveApps[name]) return false // Future notification
 
             delete this.ActiveApps[name]
+        },
+        activeApp(obj) {
+            console.log(obj);
+            this.highestApp = obj
         },
         newNotification(app, title, message, detail) {
             this.notifications.push({
@@ -87,6 +94,7 @@ export default {
         return {
             Apps,
             favorites,
+            highestApp: null,
             notifications: [],
             ActiveApps: {}
         }

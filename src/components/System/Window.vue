@@ -1,5 +1,5 @@
 <template>
-    <div class="window" :class="((active) ? 'active ' : '') + ((options.transparent) ? 'trans ' : '') + (options.size) + classes.window.join(' ')" v-on:mousemove="move">
+    <div class="window" :class="((options.transparent) ? 'trans ' : '') + (options.size) + classes.window.join(' ')" v-on:mousemove="move">
         <div class="header" v-on:mousedown="down" v-on:mouseup="up" v-on:mouseleave="up">
             <h3 class="title" v-if="!object.noTitle && object.name">{{object.name}}</h3>
             <div class="buttons">
@@ -45,6 +45,9 @@ export default {
         // * Button events * //
         close() {
             this.$emit('close')
+        },
+        newActive() {
+            this.$emit('activeApp')
         },
 
         // * Resize event * //
@@ -131,6 +134,7 @@ export default {
 
             el.style.top = top + "px";
             el.style.left = left + "px";
+            this.newActive()
         },
         up() {
             if(!this.dragging.active) return
@@ -201,11 +205,15 @@ export default {
     border-radius: 13px;
 }
 
+.window.active {
+    z-index: 14;
+}
+
 .window.trans .header {
     position: absolute;
     width: 100%;
 
-    z-index: 100;
+    z-index: 2;
 
     backdrop-filter: none;
     background-color: transparent;
