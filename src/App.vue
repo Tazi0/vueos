@@ -1,6 +1,7 @@
 <template>
     <img id="backgroundIMG" src="http://s1.picswalls.com/wallpapers/2017/12/10/4k-screensaver_110629116_312.jpg" alt="BACKGROUND">
     <Bar :favorites="favorites" @open="openApp" />
+    <Notification :Apps="this.Apps" @open="openApp" />
     <div class="windows">
         <Window v-for="(v, i) in ActiveApps" :key="i" 
             :object="v"
@@ -16,12 +17,14 @@ import Bar from "./components/System/Bar.vue"
 import Window from "./components/System/Window.vue"
 
 import Apps from "./assets/Apps.json"
+import Notification from './components/System/Notification.vue'
 
 export default {
     name: 'App',
     components: {
         Bar,
         Window,
+        Notification,
     },
     methods: {
         openApp(obj) {
@@ -127,10 +130,10 @@ html, body {
 
 * {
     user-select: none;
+    font-family: 'Kobe';
 }
 
 #app {
-    font-family: 'Kobe';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
