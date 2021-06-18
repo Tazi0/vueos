@@ -148,7 +148,8 @@ export default {
                 suggestion: {
                     items: query => {
                     return [
-                        'Tazio de Bruin'
+                        'Tazio de Bruin',
+                        'Jake Posthouwer'
                     ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
                     },
                     render: () => {
@@ -158,8 +159,8 @@ export default {
                     return {
                         onStart: props => {
                             component = new VueRenderer(MentionList, {
-                                parent: this,
-                                propsData: props,
+                                props: props,
+                                editor: this.editor,
                             })
 
                             popup = tippy('body', {
@@ -335,12 +336,7 @@ export default {
 .text ::v-deep(.ProseMirror) {
     min-height: 100px !important;
 }
-::v-deep(.ProseMirror) code {
-    background-color: #787878;
-    color: white;
-    padding: 0 5px;
-    border-radius: 15px;
-}
+
 ::v-deep(.ProseMirror) p.is-empty::before {
     content: attr(data-placeholder);
     float: left;
@@ -348,9 +344,10 @@ export default {
     pointer-events: none;
     height: 0;
 }
-.mention {
+::v-deep(.ProseMirror) .mention,
+::v-deep(.ProseMirror) code {
   color: #A975FF;
-  background-color: rgba(#A975FF, 0.1);
+  background-color: rgba(120, 120, 120, 0.1);
   border-radius: 0.3rem;
   padding: 0.1rem 0.3rem;
 }
